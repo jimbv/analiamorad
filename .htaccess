@@ -1,0 +1,32 @@
+#<FilesMatch \.p(hp|hp5|hp7|html)$>
+#    SetHandler proxy:unix:/opt/php7-3/var/run/php-fpm/c1331568.sock|fcgi://c1331568
+#</FilesMatch>
+
+# AddHandler x-httpd-php7-4 .php
+# AddHandler x-httpd-php7-3 .php
+# AddHandler x-httpd-php7-2 .php
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+	
+	RewriteEngine on
+	
+	# serve existing files in the /public folder as if they were in /
+	RewriteCond %{DOCUMENT_ROOT}public%{REQUEST_URI} -f
+	RewriteRule (.+) /public/$1 [L]
+	
+	# route everything else to /public/index.php
+	#RewriteRule ^ /public/index.php [L]
+	RewriteCond %{REQUEST_URI} !^public
+RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php73” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php73 .php .php7 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
